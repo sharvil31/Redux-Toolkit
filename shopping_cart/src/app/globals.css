@@ -65,3 +65,7 @@ nav ul li {
 .card-btn {
   @apply bg-[#1d3557] text-white py-2 px-4 rounded hover:bg-[#132339] transition-colors cursor-pointer;
 }
+
+.card-btn.remove {
+  @apply bg-red-600 hover:bg-red-700
+}

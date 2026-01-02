@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useDispatch } from "react-redux";
-import { addItem } from "./Redux/slice";
+import { addItem, removeAllItems, removeItem } from "./Redux/slice";
 
 const products = [
   {
@@ -45,7 +45,12 @@ const Product = () => {
 
   return (
     <div className="page">
-      <h1 className="text-3xl font-bold mb-6">Products</h1>
+      <div className="flex items-center mb-6 gap-10">
+        <h1 className="text-3xl font-bold">Products</h1>
+        <button onClick={() => dispatch(removeAllItems())} className="card-btn remove">
+          Clear Cart
+        </button>
+      </div>
       <div className="product-grid">
         {products.map((product) => (
           <div key={product.id} className="card">
@@ -54,9 +59,20 @@ const Product = () => {
               <h2 className="card-title">{product.name}</h2>
               <h2 className="card-description">{product.description}</h2>
               <p className="card-price">{product.price}</p>
-              <button onClick={() => dispatch(addItem())} className="card-btn">
-                Add to Cart
-              </button>
+              <div className="flex items-center gap-4 justify-center w-full">
+                <button
+                  onClick={() => dispatch(addItem())}
+                  className="card-btn"
+                >
+                  Add to Cart
+                </button>
+                <button
+                  onClick={() => dispatch(removeItem())}
+                  className="card-btn remove flex-1/2"
+                >
+                  Remove from Cart
+                </button>
+              </div>
             </div>
           </div>
         ))}
