@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { addItem, removeAllItems, removeItem } from "./Redux/slice";
+import { fetchProducts } from "./Redux/productSlice";
 
 const products = [
   {
@@ -43,11 +44,21 @@ const products = [
 const Product = () => {
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, []);
+
+  const selector = useSelector((state) => state.products.items);
+  console.log(selector);
+
   return (
     <div className="page">
       <div className="flex items-center mb-6 gap-10">
         <h1 className="text-3xl font-bold">Products</h1>
-        <button onClick={() => dispatch(removeAllItems())} className="card-btn remove">
+        <button
+          onClick={() => dispatch(removeAllItems())}
+          className="card-btn remove"
+        >
           Clear Cart
         </button>
       </div>
