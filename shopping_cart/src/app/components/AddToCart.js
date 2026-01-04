@@ -5,13 +5,13 @@ import { GrCart } from "react-icons/gr";
 import { useSelector } from "react-redux";
 
 const AddToCart = () => {
-  const selector = useSelector((state) => state.cart.value);
+  const cartSelector = useSelector((state) => state.cart.items);
 
-  console.log(selector);
+  console.log(cartSelector);
   return (
     <div className="cart">
       <GrCart className="w-7 h-7" />
-      <div className="cart-count">{selector}</div>
+      <div className="cart-count">{cartSelector.length}</div>
     </div>
   );
 };
