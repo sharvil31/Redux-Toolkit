@@ -69,7 +69,3 @@ nav ul li {
 .card-btn.remove {
   @apply bg-red-600 hover:bg-red-700
 }
-
-.card-btn.added {
-  @apply bg-[#dcdcdc] cursor-not-allowed
-}

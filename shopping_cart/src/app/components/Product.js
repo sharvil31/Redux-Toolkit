@@ -56,8 +56,8 @@ const Product = () => {
 
                 <div className="flex gap-3 mt-4">
                   {cartSelector.find((item) => item.id === product.id) ? (
-                    <button className="card-btn added flex-1">
-                      Added to Cart
+                    <button onClick={() => dispatch(removeItem(product.id))} className="card-btn remove flex-1">
+                      Remove from Cart
                     </button>
                   ) : (
                     <button
