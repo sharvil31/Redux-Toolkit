@@ -1,24 +1,44 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
 const CartItems = () => {
   const itemsSelector = useSelector((state) => state.cart.items);
+  const [cartItems, setCartItems] = useState(
+    itemsSelector.map((item) => ({
+      ...item,
+      quantity: item.quantity || 1,
+    }))
+  );
 
-  console.log(itemsSelector);
+  const handleQntyChange = (value, id) => {
+    const quantity = Math.max(1, Number(value));
+
+    const tempCartItems = cartItems.map((item) =>
+      item.id === id ? { ...item, quantity } : item
+    );
+
+    setCartItems(tempCartItems);
+  };
+
+  const totalPrice = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
   return (
     <div className="cart-container">
       <div className="cart-header">
         <h1>Cart Items</h1>
         <p>
-          <span className="font-semibold text-xl">{itemsSelector.length}</span>{" "}
+          <span className="font-semibold text-xl">{cartItems.length}</span>{" "}
           Items
         </p>
       </div>
 
       <div>
-        {itemsSelector.map((item) => (
+        {cartItems.map((item) => (
           <div key={item.id} className="cart-item">
             <div className="item-info">
               <img src={item.thumbnail} alt={item.title} />
@@ -29,14 +49,30 @@ const CartItems = () => {
             </div>
 
             <div className="item-actions">
-              <span className="price">{item.price}</span>
-              <button className="card-btn remove">Remove</button>
+              <div className="actions-wrapper">
+                <input
+                  type="number"
+                  value={item.quantity}
+                  onChange={(e) => handleQntyChange(e.target.value, item.id)}
+                  className="qnty-input"
+                  placeholder="Enter Quantity"
+                />
+                <div className="flex flex-col">
+                  <span className="price">
+                    ${(item.price * item.quantity).toFixed(2)}
+                  </span>
+                  <button className="card-btn remove">Remove</button>
+                </div>
+              </div>
             </div>
           </div>
         ))}
 
         <div className="total-price">
-          Total: <span className="text-emerald-700">{itemsSelector.reduce((sum, curr) => sum + curr.price, 0)}</span>
+          Total:{" "}
+          <span className="text-emerald-700">
+            ${totalPrice.toFixed(2)}
+          </span>
         </div>
       </div>
     </div>

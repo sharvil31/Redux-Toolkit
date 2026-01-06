@@ -122,3 +122,11 @@ nav ul li {
 .total-price {
   @apply text-right font-semibold text-xl mt-2
 }
+
+.item-actions .actions-wrapper {
+  @apply flex gap-4 items-end
+}
+
+.qnty-input {
+  @apply h-10 px-2 w-[150px] border border-gray-700 focus:border-transparent outline-blue-600 focus:ring focus:ring-blue-600 transition-colors
+}
