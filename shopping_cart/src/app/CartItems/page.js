@@ -1,16 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  removeAllItems,
+  removeItem,
+  setQuntity,
+} from "../components/Redux/slice";
+import { useRouter } from "next/navigation";
 
 const CartItems = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const itemsSelector = useSelector((state) => state.cart.items);
-  const [cartItems, setCartItems] = useState(
-    itemsSelector.map((item) => ({
-      ...item,
-      quantity: item.quantity || 1,
-    }))
-  );
+  const [cartItems, setCartItems] = useState(itemsSelector);
+
+  useEffect(() => {
+    setCartItems(itemsSelector);
+  }, [itemsSelector]);
 
   const handleQntyChange = (value, id) => {
     const quantity = Math.max(1, Number(value));
@@ -19,6 +26,7 @@ const CartItems = () => {
       item.id === id ? { ...item, quantity } : item
     );
 
+    dispatch(setQuntity({ id, quantity }));
     setCartItems(tempCartItems);
   };
 
@@ -26,6 +34,13 @@ const CartItems = () => {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  const handlePlaceOrder = () => {
+    localStorage.clear();
+    alert("Order placed!");
+    dispatch(removeAllItems());
+    router.push("/");
+  };
 
   return (
     <div className="cart-container">
@@ -61,7 +76,12 @@ const CartItems = () => {
                   <span className="price">
                     ${(item.price * item.quantity).toFixed(2)}
                   </span>
-                  <button className="card-btn remove">Remove</button>
+                  <button
+                    onClick={() => dispatch(removeItem(item.id))}
+                    className="card-btn remove"
+                  >
+                    Remove
+                  </button>
                 </div>
               </div>
             </div>
@@ -70,10 +90,12 @@ const CartItems = () => {
 
         <div className="total-price">
           Total:{" "}
-          <span className="text-emerald-700">
-            ${totalPrice.toFixed(2)}
-          </span>
+          <span className="text-emerald-700">${totalPrice.toFixed(2)}</span>
         </div>
+
+        <button onClick={handlePlaceOrder} className="card-btn">
+          Place Order
+        </button>
       </div>
     </div>
   );
